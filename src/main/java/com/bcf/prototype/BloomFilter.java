@@ -16,18 +16,24 @@ public class BloomFilter implements Filter {
     }
 
     @Override
-    public void add(String key) {
+    public boolean add(String key) {
         if (hasKey(key)) {
             totalCollisions++;
         }
         int index = getIndex(key);
         bits[index / 8] |= (1 << (index % 8));   // set bit
+        return true;
     }
 
     @Override
     public boolean hasKey(String key) {
         int index = getIndex(key);
         return (bits[index / 8] & (1 << (index % 8))) != 0;
+    }
+
+    @Override
+    public boolean delete(String key) {
+        throw new IllegalArgumentException("Bloom filter does not support deletes");
     }
 
     private int getIndex(String key) {
